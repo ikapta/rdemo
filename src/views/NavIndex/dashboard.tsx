@@ -23,6 +23,8 @@ const App: React.FC = () => {
     setPageLoading(!pageLoading)
   }
 
+
+
   useEffect(() => {
     document.title = `you can see ${show}`
   })
