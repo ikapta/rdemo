@@ -19,6 +19,10 @@
     "noEmit": true,
     "jsx": "react"
   },
+  "typeRoots": [
+    "node_modules/@types",
+    "node_modules/_@types_react-router-dom@4.3.5@@types",
+  ],
   "include": [
     "src"
   ]

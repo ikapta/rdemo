@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import routers from '../router'
 import { Link } from 'react-router-dom'
 
-const App: React.FC = () => {
+const App: React.FC<{history: any}> = ({ history}) => {
+
+  useEffect(() => {
+    console.log(history)
+  })
   return (
     <div className="App">
 

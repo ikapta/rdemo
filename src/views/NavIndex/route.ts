@@ -4,7 +4,7 @@ import { RouteProps } from 'react-router-dom'
 
 const router: RouteProps[] = [
   {
-    path: '/',
+    path: '/dashboard',
     component: Dashboard
   },
   {

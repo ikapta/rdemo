@@ -6,6 +6,9 @@ declare global {
   interface Window {
     infoWindowConfirm: any
   }
+  // interface document {
+  //   title: string
+  // }
 }
 
 

@@ -1,23 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
+import { Button, message, Modal } from "antd"
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Home1 <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+
+  const Item = ( props: any ) => {
+    return   <li> { props.content } </li>
+  }
+
+  const HookComponent: React.FC<{ history: any }> = ({ history }) => {
+
+
+    let [modalVisible, setModalVisible] = useState(false)
+
+    function handleModalOk () {
+      setModalVisible(true)
+    }
+    function handleModalCancel () {
+      setModalVisible(false)
+    }
+    // console.log( count , setCount )
+    const routeChange = () => {
+      history.push('/nav', {id: 113})
+    }
+
+    useEffect ( () => {
+      //执行副作用的函数
+      document.title = 'ddd'
+    })
+
+    const alertX = () => {
+      message.success('this is a success')
+      handleModalOk()
+    }
+
+    return (
+      <div>
+        hook
+        <Button onClick={routeChange}>nav页</Button>
+        <Button onClick={alertX}>alert</Button>
+
+        <Modal
+          title="Basic Modal"
+          visible={modalVisible}
+          onOk={handleModalOk}
+          onCancel={handleModalCancel}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
 
-export default App;
+
+
+
+      </div>
+    )
+  }
+
+
+  export default HookComponent
