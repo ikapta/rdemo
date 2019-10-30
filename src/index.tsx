@@ -5,4 +5,6 @@ import App from './App';
 
 window.isAuth = false
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <App />
+, document.getElementById('root'));

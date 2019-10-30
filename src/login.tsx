@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from "antd"
+import { connect } from "react-redux"
 import { useHistory } from "react-router-dom"
 
 const Login: React.FC = () =>{
@@ -7,9 +8,10 @@ const Login: React.FC = () =>{
 
   const routeChange = () => {
     window.isAuth = true
+
     history.push('/home')
   }
-
+  // @ts-ignore
   return (
     <div>
       <h3>LOGIN PAGE</h3>

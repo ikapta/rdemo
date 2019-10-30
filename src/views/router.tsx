@@ -4,6 +4,7 @@ import HomeRoute from './home/route'
 import NavIndex from './NavIndex/route'
 import Login from '../login'
 
+
 export interface RouteMap extends RouteProps {
   metaName?: String
   metaAuth?: Boolean
@@ -16,6 +17,7 @@ const routers: RouteMap[] = [
 const NotFound = () => (<div>not fount</div>)
 
 function PrivateRoute (props: RouteMap) {
+
   const Comp = props.component ?  props.component : () => (<div>empty component</div>)
   return (
     <div>
@@ -36,6 +38,7 @@ function PrivateRoute (props: RouteMap) {
 
 const BaseRouter: React.FC = () => {
   console.log(routers.length)
+
   return (
     <BrowserRouter>
 
