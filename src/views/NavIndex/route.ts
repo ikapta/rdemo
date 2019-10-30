@@ -8,7 +8,7 @@ const router: RouteProps[] = [
     component: Dashboard
   },
   {
-    path: '/nav',
+    path: '/nav/:tid',
     component: Nav
   }
 ]

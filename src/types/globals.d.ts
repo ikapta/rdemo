@@ -5,6 +5,7 @@ declare global {
   }
   interface Window {
     infoWindowConfirm: any
+    isAuth: boolean
   }
   // interface document {
   //   title: string

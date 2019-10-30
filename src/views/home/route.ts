@@ -1,11 +1,12 @@
 import Home from './home'
+import { RouteMap } from '../router'
 
-import { RouteProps } from 'react-router-dom'
-
-const router: RouteProps[] = [
+const router: RouteMap[] = [
   {
     path: '/home',
-    component: Home
+    component: Home,
+    metaName: '首页',
+    metaAuth: true,
   }
 ]
 
