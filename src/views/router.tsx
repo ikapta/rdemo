@@ -1,8 +1,10 @@
 import React from 'react'
 import { Route, Redirect, RouteProps, BrowserRouter } from 'react-router-dom'
+import { useSelector} from "react-redux"
 import HomeRoute from './home/route'
 import NavIndex from './NavIndex/route'
 import Login from '../login'
+import Todo from './todo/route'
 
 
 export interface RouteMap extends RouteProps {
@@ -12,19 +14,29 @@ export interface RouteMap extends RouteProps {
 
 const routers: RouteMap[] = [
   ...HomeRoute,
-  ...NavIndex
+  ...NavIndex,
+  ...Todo
 ]
-const NotFound = () => (<div>not fount</div>)
+
+const NotFound = () => {
+  const isAuth = useSelector((state: any) => state.gb.isAuth)
+  return (
+    <div>
+      not fount
+      <br />isAuth: {isAuth.toString()}
+    </div>
+  )
+}
 
 function PrivateRoute (props: RouteMap) {
-
+  const isAuth = useSelector((state: any) => state.gb.isAuth)
   const Comp = props.component ?  props.component : () => (<div>empty component</div>)
   return (
     <div>
       <Route
         path={props.path}
         render={(routeProps) =>{
-          return window.isAuth || !props.metaAuth ? (
+          return isAuth || !props.metaAuth ? (
             <Comp {...routeProps}></Comp>
             ) : (
             <Redirect to={{ pathname: "/login", state: { from: routeProps.location } }} />
@@ -42,7 +54,7 @@ const BaseRouter: React.FC = () => {
   return (
     <BrowserRouter>
 
-      {/* <Route path='/' component={Container}></Route> */}
+      <Route path='/' component={NotFound}></Route>
       {/* { routers.map((router, index) => <Route key={index} {...router} /> )} */}
 
       { routers.map((router, index) => <PrivateRoute key={index} {...router} />)}

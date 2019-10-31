@@ -1,14 +1,22 @@
 import React from 'react'
 import { Button } from "antd"
-import { connect } from "react-redux"
+import { connect, useSelector, useDispatch } from "react-redux"
 import { useHistory } from "react-router-dom"
+import { setAuthAction } from '../src/redux/reducers/gb'
 
-const Login: React.FC = () =>{
+const Login: React.FC = (props: any) =>{
   let history = useHistory()
+
+  console.log(props)
+  const isAuth = useSelector((state: any) => state.gb.isAuth)
+  const dispatch = useDispatch()
+
 
   const routeChange = () => {
     window.isAuth = true
-
+    console.log(isAuth)
+    dispatch(setAuthAction(true))
+    console.log(isAuth)
     history.push('/home')
   }
   // @ts-ignore
@@ -19,4 +27,9 @@ const Login: React.FC = () =>{
     </div>
   )
 }
-export default Login
+
+const mapStateToProps = (state: any) => {
+  return { isAuth: state.gb.isAuth }
+}
+
+export default connect(mapStateToProps)(Login)

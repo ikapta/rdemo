@@ -7,9 +7,6 @@ declare global {
     infoWindowConfirm: any
     isAuth: boolean
   }
-  // interface document {
-  //   title: string
-  // }
 }
 
 

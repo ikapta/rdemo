@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Button, message, Modal } from "antd"
 import { useHistory } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 
   const HookComponent: React.FC<{ history: any }> = (home) => {
 
     let [modalVisible, setModalVisible] = useState(false)
     let history = useHistory()
-
+    const isAuth = useSelector((state: any) => state.gb.isAuth)
+    console.log(isAuth)
     function handleModalOk () {
       setModalVisible(true)
     }
@@ -33,7 +35,6 @@ import { useHistory } from "react-router-dom"
     return (
       <div>
         hook
-
         <Button onClick={routeChange}>nav页</Button>
         <Button onClick={alertX}>alert</Button>
 
