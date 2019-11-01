@@ -1,0 +1,24 @@
+// eg: vue
+
+export function openEditPermissionDialog (handleCallback) {
+  const openDialogInstance = singletonOf(EditPermissionDialog)
+  openDialogInstance.dialogVisible = true
+  openDialogInstance.handleCallback = handleCallback
+}
+
+let singletons = {}
+function singletonOf (component) {
+  // each component name cant same
+  if (!singletons[component.name]) {
+    const ComponentConstructor = Vue.extend(component)
+    const singletonInstance = new ComponentConstructor({
+      el: document.createElement('div'), store
+    })
+    singletons[component.name] = singletonInstance
+    document.body.appendChild(singletonInstance.$el)
+  }
+  return singletons[component.name]
+}
+
+
+export default openEditPermissionDialog

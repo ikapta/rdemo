@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, Input } from "antd"
 import { ThemeContext } from './todo'
 import $Style from './style.module.sass'
+import { openAddDialog } from './dialogs'
 
   const HookComponent: FunctionComponent = ({ createTodo }: {
     createTodo: Function
@@ -15,6 +16,12 @@ import $Style from './style.module.sass'
       })
     }
 
+    function openModal () {
+      openAddDialog(() => {
+        console.log('callbackFunction')
+      })
+    }
+
     return (
       <div style={{ color: theme.foreground, background: theme.background }}
         className={$Style.create}
@@ -22,6 +29,7 @@ import $Style from './style.module.sass'
           <span>KKKKK</span>
           <Input value={localDesc} onChange={e => setLocalDesc(e.target.value)} />
           <Button onClick={() => innerCreate()}>add todo</Button>
+          <Button onClick={() => openModal()}>modal add todo</Button>
       </div>
     )
   }
