@@ -38,6 +38,9 @@
   "devDependencies": {
     "@types/react": "^16.9.11",
     "@types/react-redux": "^7.1.5",
-    "@types/react-router-dom": "^5.1.0"
+    "@types/react-router-dom": "^5.1.0",
+    "node-sass": "^4.13.0",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2"
   }
 }
