@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
 import { Button, Input } from "antd"
 import { ThemeContext } from './todo'
-import $Style from './style.module.css'
-import $S1 from './style1.module.styl'
+import $Style from './style.module.sass'
 
   const HookComponent: FunctionComponent = ({ createTodo }: {
     createTodo: Function
   }) => {
     let [localDesc, setLocalDesc] = useState('')
     const theme = React.useContext(ThemeContext)
-
-    console.log($Style)
 
     function innerCreate () {
       createTodo(localDesc).then((res: string) => {
