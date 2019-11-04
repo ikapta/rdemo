@@ -16,14 +16,14 @@ class App extends React.Component {
     });
   };
 
-  handleOk = (e: any) => {
+  handleOk = (e: React.MouseEvent<HTMLElement>) => {
     this.setState({
       visible: false,
     });
     this.callbackFunction && this.callbackFunction()
   };
 
-  handleCancel = (e: any) => {
+  handleCancel = (e: React.MouseEvent<HTMLElement>) => {
     this.setState({
       visible: false,
     });

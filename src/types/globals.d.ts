@@ -8,6 +8,18 @@ declare global {
 
   }
 
+  // promise type
+  /* eg
+  export interface MessageType {
+    (): void;
+    then: (fill: ThenableArgument, reject: ThenableArgument) => Promise<void>;
+    promise: Promise<void>;
+  }
+  */
+  export interface ThenableArgument {
+    (val: any): void;
+  }
+
   interface IKV<T> {
     [key: string]: T
   }
