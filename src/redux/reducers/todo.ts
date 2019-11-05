@@ -1,7 +1,7 @@
 import * as AT from '../actionTypes'
 
 export interface IKV<T> {
-  [index: string]: T
+  [key: string]: T // cant symbol
 }
 
 export interface ITodo {
@@ -12,11 +12,16 @@ export interface IInitTodoState {
   todos: ITodo[],
   test: String
 }
-
 export interface IAction<T> {
   type: string
   payload: T
 }
+
+export interface ISAction<T> {
+  type: symbol
+  payload: T
+}
+
 
 const initialState: IInitTodoState = {
   todos: [{ id: 1, desc: 'ddd' }],
@@ -51,7 +56,7 @@ export default function (state: IInitTodoState = initialState, action: IAction<I
 }
 
 // actions
-function baseAction<T> (type: string, payload: T): IAction<T> {
+function baseAction<T> (type: symbol, payload: T): ISAction<T> {
   return { type, payload }
 }
 

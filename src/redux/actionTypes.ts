@@ -1,4 +1,4 @@
-export const AUTH_CHANGE = 'AUTH_CHANGE'
+export const AUTH_CHANGE = Symbol()
 
-export const TODO_ADD = 'TODO_ADD'
-export const TODO_REMOVE = 'TODO_REMOVE'
+export const TODO_ADD = Symbol()
+export const TODO_REMOVE = Symbol()

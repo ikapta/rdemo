@@ -8,6 +8,8 @@ declare global {
 
   }
 
+  function f<T>(...items: T[]): T;
+
   // promise type
   /* eg
   export interface MessageType {
