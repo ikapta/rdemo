@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - 12
+install:
+  - echo '[exec npm install]'
+  - npm install
+script:
+  - echo '[exec script]'
+  - npm run build
+after_success:
+  - echo 'exec after_success'
