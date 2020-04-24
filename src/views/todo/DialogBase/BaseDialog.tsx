@@ -1,16 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Modal } from 'antd'
 
-import { Modal, Button } from 'antd';
+abstract class BaseDialog extends React.Component {
+  public state = {
+    visible: false,
+    title: ''
+  };
 
-class App extends React.Component {
-  public state = { visible: false };
+  protected abstract slot(): FunctionComponent | any
 
   public callbackFunction = () => {
     console.log('inner callbackFunction');
   };
 
-  public showModal = () => {
+  public showModal () {
     this.setState({
       visible: true,
     });
@@ -30,6 +34,7 @@ class App extends React.Component {
   };
 
   render() {
+    const Slot = this.slot
     return (
       <div className="addDialog">
         {/* <Button type="primary" onClick={this.showModal}>
@@ -41,23 +46,12 @@ class App extends React.Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Slot></Slot>
         </Modal>
       </div>
     );
   }
+
 }
 
-export default App
-
-// export default function Re () {
-//   const mountNode = document.createElement('div');
-//   document.body.appendChild(mountNode);
-//   const ComponentConstructor: any = ReactDOM.render(<App />, mountNode);
-//   console.log(ComponentConstructor)
-//   ComponentConstructor.showModal()
-// }
-
-
+export default BaseDialog

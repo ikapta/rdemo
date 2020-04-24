@@ -27,7 +27,8 @@ declare global {
   }
   interface Window {
     infoWindowConfirm: any
-  isAuth: boolean
+    isAuth: boolean
+    xx: any
   }
 }
 

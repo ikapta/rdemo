@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Button, Input } from "antd"
 import { ThemeContext } from './todo'
 import $Style from './style.module.sass'
-import { openAddDialog } from './dialogs'
+import { openAddDialog, openOtherDialog } from './DialogFactory'
 
-  const HookComponent: FunctionComponent = ({ createTodo }: {
+  const Create: FunctionComponent = ({ createTodo }: {
     createTodo: Function
   }) => {
     let [localDesc, setLocalDesc] = useState('')
@@ -22,6 +22,12 @@ import { openAddDialog } from './dialogs'
       })
     }
 
+    function openOther () {
+      openOtherDialog(() => {
+
+      })
+    }
+
     return (
       <div style={{ color: theme.foreground, background: theme.background }}
         className={$Style.create}
@@ -30,8 +36,9 @@ import { openAddDialog } from './dialogs'
           <Input value={localDesc} onChange={e => setLocalDesc(e.target.value)} />
           <Button onClick={() => innerCreate()}>add todo</Button>
           <Button onClick={() => openModal()}>modal add todo</Button>
+          <Button onClick={() => openOther()}>modal add todo</Button>
       </div>
     )
   }
 
-  export default HookComponent
+  export default Create
