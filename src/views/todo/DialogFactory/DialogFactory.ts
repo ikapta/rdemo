@@ -18,14 +18,14 @@ class dialogFactory {
     if (this.singletons[dialogName]) {
       return this.singletons[dialogName]
     } else {
-      const { instance, div } = this.open(Component)
+      const { instance, div } = this.createAInstance(Component)
       this.singletons[dialogName] = instance
       this.divContainer[dialogName] = div
       return instance
     }
   }
 
-  private open (component: FunctionComponent) {
+  private createAInstance (component: FunctionComponent) {
     const div = document.createElement('div')
     const constructor = React.createElement(component, null)
     const instance: any = ReactDOM.render(constructor, div)
