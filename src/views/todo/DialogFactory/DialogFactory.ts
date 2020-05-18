@@ -46,6 +46,7 @@ class dialogFactory {
   public destroyAll () {
     Object.values(this.divContainer).forEach(div => ReactDOM.unmountComponentAtNode(div))
     this.singletons = {}
+    this.divContainer = {}
   }
 }
 

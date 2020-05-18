@@ -1,0 +1,46 @@
+class DialogFactory {
+  singletons = {}
+  divContainer = {}
+  constructor() {
+    this.singletons = {}
+  }
+
+  get getDialog(Component) {
+    const dialogName = Component.name
+    if (this.singletons[dialogName]) {
+      return this.singletons[dialogName]
+    } else {
+      const { singletonInstance, div } = this.createAInstance(component)
+      this.singletons[dialogName] = singletonInstance
+      this.divContainer[dialogName] = div
+    }
+  }
+
+  createAInstance (component) {
+    const ComponentConstructor = Vue.extend(component)
+    const div = document.createElement('div')
+    const singletonInstance = new ComponentConstructor({
+      el: div, store, router
+    })
+    document.body.appendChild(div)
+    return { singletonInstance, div }
+  }
+
+  destroy (dialogName) {
+    if (dialogName) {
+      const div = this.divContainer[dialogName]
+      const vm = this.singletons[dialogName]
+      vm.$destroy()
+      div.remove()
+      delete this.divContainer[dialogName]
+      delete this.singletons[dialogName]
+    }
+  }
+
+  destroyAll () {
+    Object.keys(this.singletons).forEach(vm => vm.$destroy())
+    Object.values(this.divContainer).forEach(div => div.remove())
+    this.singletons = {}
+    this.divContainer = {}
+  }
+}
