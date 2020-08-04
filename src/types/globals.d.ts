@@ -25,6 +25,17 @@ declare global {
   interface IKV<T> {
     [key: string]: T
   }
+
+  type ObjectMap<Key extends string | number | symbol = any, Value = any> = {
+    [key in Key]: Value
+  }
+
+  type IResult<T = any> = {
+    code: number,
+    data: T,
+    message: string
+  }
+
   interface Window {
     infoWindowConfirm: any
     isAuth: boolean
