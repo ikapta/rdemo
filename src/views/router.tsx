@@ -5,6 +5,7 @@ import HomeRoute from './home/route'
 import NavIndex from './NavIndex/route'
 import Login from '../login'
 import Todo from './todo/route'
+import Table from './table/route'
 
 
 export interface RouteMap extends RouteProps {
@@ -15,7 +16,8 @@ export interface RouteMap extends RouteProps {
 const routers: RouteMap[] = [
   ...HomeRoute,
   ...NavIndex,
-  ...Todo
+  ...Todo,
+  ...Table
 ]
 
 const NotFound = () => {

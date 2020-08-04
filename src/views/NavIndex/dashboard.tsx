@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Icon, Mentions, Spin } from "antd"
+import { Button, Mentions, Spin } from "antd"
 
 const App: React.FC = () => {
   let [show,  setShow] = useState(false)
@@ -45,7 +45,7 @@ const App: React.FC = () => {
         <hr/>
       <Link to="/home">首页</Link>
 
-      <Icon type="down-circle" theme="twoTone" />
+      {/* <Icon type="down-circle" theme="twoTone" /> */}
 
       <p> you can see title change: {show.toString()} </p>
       <hr/>
