@@ -1,5 +1,7 @@
-import Home from './home'
+import { lazy } from 'react'
 import { RouteMap } from '../router'
+
+const Home = lazy(() => import(/* webpackChunkName: "combine" */ './home'))
 
 const router: RouteMap[] = [
   {

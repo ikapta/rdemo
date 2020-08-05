@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Space, Divider } from 'antd'
+import { RouteComponentProps } from 'react-router-dom'
+import TestMemo from './testMemoComp'
+import TestCount, { AbCounter } from './testCount'
+
+
+interface IProps extends RouteComponentProps {}
 
 type TPage = {
   current: number
@@ -42,8 +48,9 @@ let columns1 = [
   },
 ]
 
-const HookComponent: React.FC<{ history: any }> = (home) => {
+const HookComponent: React.FC<IProps> = (props) => {
 
+    console.count('entry')
     const [dataSource, setDataSource] = useState<TDataSource1[]>([])
     const [loading, setLoading] = useState(false)
     const [columns] = useState(columns1)
@@ -51,39 +58,43 @@ const HookComponent: React.FC<{ history: any }> = (home) => {
       current: 1, size: 5, total: 0
     })
 
-    function getList() {
+    function getList(tPage: TPage) {
       setLoading(true)
       setTimeout(x => {
-        const { current, size } = tablePage
-        console.log('tablePage', tablePage)
+        const { current, size } = tPage
         let data = dataSource1.slice((current - 1) * size, current* size)
-        console.log(data)
-        setTablePage({ ...tablePage, total: dataSource1.length })
+        setTablePage({ ...tPage, total: dataSource1.length })
         setLoading(false)
         setDataSource(data)
       }, 100)
     }
 
     function onPageChange(page: number, pageSize: number) {
-      console.log(page)
-      setTablePage({ ...tablePage, current: page, size: pageSize })
-      // getList()
+      const tPage = { ...tablePage, current: page, size: pageSize }
+      setTablePage(tPage)
+      getList(tPage)
     }
 
-    function onShowSizeChange(size: number) {
-      console.log('size', size)
-      setTablePage({ ...tablePage, size })
-    }
+    // 只执行一次
+    useEffect(() => {
+      console.count('useEffect')
+      getList(tablePage)
+    }, [])
 
     // getList接口尽量纯的参数接收，不从useEffect发起请求
-    useEffect(() => {
-      getList()
-    }, [tablePage.current, tablePage.size])
+    // useEffect(() => {
+    //   getList()
+    // }, [tablePage.current, tablePage.size])
 
     return (
       <>
+        <Divider></Divider>
+        <TestCount></TestCount>
+        <Divider></Divider>
+        <AbCounter></AbCounter>
+        <TestMemo {...props} title={'你好'} desc={'good day'} />
         <Space style={{ marginBottom: 16 }}>
-          <Button onClick={getList} loading={loading}>查询</Button>
+          <Button onClick={() => getList(tablePage)} loading={loading}>查询</Button>
         </Space>
         <Table
           loading={loading}
@@ -101,6 +112,5 @@ const HookComponent: React.FC<{ history: any }> = (home) => {
       </>
     )
   }
-
 
   export default HookComponent

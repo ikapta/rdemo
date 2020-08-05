@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { Route, Redirect, RouteProps, BrowserRouter } from 'react-router-dom'
 import { useSelector} from "react-redux"
 import HomeRoute from './home/route'
@@ -6,7 +6,7 @@ import NavIndex from './NavIndex/route'
 import Login from '../login'
 import Todo from './todo/route'
 import Table from './table/route'
-
+import ErrorBoundary from '../components/ErrorBoundary/index'
 
 export interface RouteMap extends RouteProps {
   metaName?: String
@@ -54,16 +54,20 @@ const BaseRouter: React.FC = () => {
   console.log(routers.length)
 
   return (
-    <BrowserRouter>
+    <Suspense fallback={<div>Loading...</div>}>
+      <ErrorBoundary>
+        <BrowserRouter>
 
-      <Route path='/' component={NotFound}></Route>
-      {/* { routers.map((router, index) => <Route key={index} {...router} /> )} */}
+          <Route path='/' component={NotFound}></Route>
+          {/* { routers.map((router, index) => <Route key={index} {...router} /> )} */}
 
-      { routers.map((router, index) => <PrivateRoute key={index} {...router} />)}
+          { routers.map((router, index) => <PrivateRoute key={index} {...router} />)}
 
-      <Route path='/login' component={Login}></Route>
+          <Route path='/login' component={Login}></Route>
 
-    </BrowserRouter>
+        </BrowserRouter>
+      </ErrorBoundary>
+     </Suspense>
   )
 }
 

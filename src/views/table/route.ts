@@ -6,7 +6,7 @@ const router: RouteMap[] = [
     path: '/table',
     component: Table,
     metaName: '表格',
-    metaAuth: true,
+    metaAuth: false,
   }
 ]
 

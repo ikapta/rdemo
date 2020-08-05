@@ -37,6 +37,7 @@ declare global {
   }
 
   interface Window {
+    location: any
     infoWindowConfirm: any
     isAuth: boolean
     xx: any

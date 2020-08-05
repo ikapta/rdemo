@@ -1,5 +1,9 @@
-import Todo from './todo'
+
+import { lazy } from 'react'
 import { RouteMap } from '../router'
+
+const Todo = lazy(() => import('./todo'))
+
 
 const router: RouteMap[] = [
   {
