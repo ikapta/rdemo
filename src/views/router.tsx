@@ -1,11 +1,13 @@
 import React, { Suspense, lazy } from 'react'
 import { Route, Redirect, RouteProps, BrowserRouter } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 import { useSelector} from "react-redux"
 import HomeRoute from './home/route'
 import NavIndex from './NavIndex/route'
 import Login from '../login'
 import Todo from './todo/route'
 import Table from './table/route'
+import Table2 from './table2/route'
 import ErrorBoundary from '../components/ErrorBoundary/index'
 
 export interface RouteMap extends RouteProps {
@@ -17,7 +19,8 @@ const routers: RouteMap[] = [
   ...HomeRoute,
   ...NavIndex,
   ...Todo,
-  ...Table
+  ...Table,
+  ...Table2
 ]
 
 const NotFound = () => {
@@ -52,6 +55,13 @@ function PrivateRoute (props: RouteMap) {
 
 const BaseRouter: React.FC = () => {
   console.log(routers.length)
+
+  const history = createBrowserHistory()
+
+  history.listen((location) => {
+    const path = location.pathname.substr(1)
+    console.log('history path: ', path)
+  })
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
