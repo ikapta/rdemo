@@ -3,6 +3,7 @@ import { Table, Button, Space, Divider } from 'antd'
 import { RouteComponentProps } from 'react-router-dom'
 import TestMemo from './testMemoComp'
 import TestCount, { AbCounter } from './testCount'
+import QueryForm from './queryForm'
 
 
 interface IProps extends RouteComponentProps {}
@@ -16,7 +17,7 @@ type TPage = {
 type TDataSource1 = {
   key: string,
   name: string,
-  age: number,
+  age: number ,
   address: string
 }
 let dataSource1: TDataSource1[] = []
@@ -48,6 +49,11 @@ let columns1 = [
   },
 ]
 
+export interface ISearchObj {
+  name: string,
+  age: number | null
+}
+
 const HookComponent: React.FC<IProps> = (props) => {
 
     console.count('entry')
@@ -57,12 +63,17 @@ const HookComponent: React.FC<IProps> = (props) => {
     const [tablePage, setTablePage] = useState<TPage>({
       current: 1, size: 5, total: 0
     })
+    const [searchObj, setSearchObj] = useState<ISearchObj>({
+      name: '', age: null
+    })
 
-    function getList(tPage: TPage) {
+    function getList(tPage: TPage, search: ISearchObj) {
       setLoading(true)
-      setTimeout(x => {
+      return setTimeout(x => {
         const { current, size } = tPage
-        let data = dataSource1.slice((current - 1) * size, current* size)
+        const searchAge = search.age ? search.age : 0
+        const dataPool = dataSource1.filter(x => x.age > searchAge)
+        let data = dataPool.slice((current - 1) * size, current* size)
         setTablePage({ ...tPage, total: dataSource1.length })
         setLoading(false)
         setDataSource(data)
@@ -72,13 +83,18 @@ const HookComponent: React.FC<IProps> = (props) => {
     function onPageChange(page: number, pageSize: number) {
       const tPage = { ...tablePage, current: page, size: pageSize }
       setTablePage(tPage)
-      getList(tPage)
+      getList(tPage, searchObj)
+    }
+
+    function onSearchChange(search: ISearchObj) {
+      setSearchObj(search)
+      return getList(tablePage, search)
     }
 
     // 只执行一次
     useEffect(() => {
       console.count('useEffect')
-      getList(tablePage)
+      getList(tablePage, searchObj)
     }, [])
 
     // getList接口尽量纯的参数接收，不从useEffect发起请求
@@ -93,8 +109,9 @@ const HookComponent: React.FC<IProps> = (props) => {
         <Divider></Divider>
         <AbCounter></AbCounter>
         <TestMemo {...props} title={'你好'} desc={'good day'} />
+        <QueryForm loading={loading} onSearch={(search) => onSearchChange(search)}></QueryForm>
         <Space style={{ marginBottom: 16 }}>
-          <Button onClick={() => getList(tablePage)} loading={loading}>查询</Button>
+          <Button onClick={() => getList(tablePage, searchObj)} loading={loading}>查询</Button>
         </Space>
         <Table
           loading={loading}

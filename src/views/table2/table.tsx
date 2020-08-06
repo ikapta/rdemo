@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Button, Space, Divider } from 'antd'
+import { Table, Button, Space, Divider, Tooltip, Popconfirm } from 'antd'
 import { RouteComponentProps } from 'react-router-dom'
-import TestMemo from './testMemoComp'
-import TestCount, { AbCounter } from './testCount'
-
+import { TablePaginationConfig } from 'antd/lib/table'
+import useTableData, { OperationTypeEnum, TDataSource1 } from './reducer'
 
 interface IProps extends RouteComponentProps {}
 
@@ -13,12 +12,6 @@ type TPage = {
   total: number
 }
 
-type TDataSource1 = {
-  key: string,
-  name: string,
-  age: number,
-  address: string
-}
 let dataSource1: TDataSource1[] = []
 for (let i = 0; i < 40; i++) {
   let item: TDataSource1 = {
@@ -30,30 +23,12 @@ for (let i = 0; i < 40; i++) {
   dataSource1.push(item)
 }
 
-let columns1 = [
-  {
-    title: '姓名',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: '住址',
-    dataIndex: 'address',
-    key: 'address',
-  },
-]
-
 const HookComponent: React.FC<IProps> = (props) => {
 
     console.count('entry')
-    const [dataSource, setDataSource] = useState<TDataSource1[]>([])
+    // const [dataSource, setDataSource] = useState<TDataSource1[]>([])
+    const [dataSource, dispatchDataSource] = useTableData([])
     const [loading, setLoading] = useState(false)
-    const [columns] = useState(columns1)
     const [tablePage, setTablePage] = useState<TPage>({
       current: 1, size: 5, total: 0
     })
@@ -63,10 +38,17 @@ const HookComponent: React.FC<IProps> = (props) => {
       setTimeout(x => {
         const { current, size } = tPage
         let data = dataSource1.slice((current - 1) * size, current* size)
+
         setTablePage({ ...tPage, total: dataSource1.length })
         setLoading(false)
-        setDataSource(data)
+        dispatchDataSource({type: OperationTypeEnum.REFRESH, payload: data})
       }, 100)
+    }
+
+    function deleteItem (item: TDataSource1) {
+      setLoading(true)
+      dispatchDataSource({type: OperationTypeEnum.DELETE, payload: item})
+      setLoading(false)
     }
 
     function onPageChange(page: number, pageSize: number) {
@@ -86,28 +68,85 @@ const HookComponent: React.FC<IProps> = (props) => {
     //   getList()
     // }, [tablePage.current, tablePage.size])
 
+    const pagination = {
+      defaultCurrent: tablePage.current,
+      defaultPageSize: tablePage.size,
+      total: tablePage.total,
+      showTotal: (total: number) => `Total ${total} items`,
+      showSizeChanger: true,
+      showQuickJumper: true,
+      onChange: (page: number, pageSize: number) => onPageChange(page, pageSize as number)
+    } as TablePaginationConfig
+
+    const columns = [
+      {
+        title: '姓名',
+        dataIndex: 'name',
+        key: 'name',
+        width: '100px',
+        render: (name: string) => (
+          <Tooltip title={name}>
+            <div style={{
+              width: '90px',
+              margin: 0,
+              boxSizing: 'border-box',
+              wordBreak: 'keep-all',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+            >
+              {name} - tooltip
+            </div>
+          </Tooltip>
+        )
+      },
+      {
+        title: '年龄',
+        dataIndex: 'age',
+        key: 'age',
+      },
+      {
+        title: '住址',
+        dataIndex: 'address',
+        key: 'address',
+      },
+      {
+        title: '操作',
+        width: '100px',
+        dataIndex: 'key',
+        render: (key: string, item: TDataSource1) => (
+          <>
+          {/* <Button type="link"
+                  style={{ padding: 0 }}
+                  onClick={() => deleteItem(item)}
+            >
+            删除
+          </Button> */}
+          <Popconfirm title="确认删除?"
+            onConfirm={() => deleteItem(item)}>
+            <a>删除</a>
+          </Popconfirm>
+          <Button type="link"
+                    style={{ padding: 0 }}
+            >
+            查看
+          </Button>
+          </>
+        )
+      },
+    ]
+
     return (
       <>
         <Divider></Divider>
-        <TestCount></TestCount>
-        <Divider></Divider>
-        <AbCounter></AbCounter>
-        <TestMemo {...props} title={'你好'} desc={'good day'} />
         <Space style={{ marginBottom: 16 }}>
           <Button onClick={() => getList(tablePage)} loading={loading}>查询</Button>
         </Space>
         <Table
           loading={loading}
           dataSource={dataSource}
-          pagination={{
-            defaultCurrent: tablePage.current,
-            defaultPageSize: tablePage.size,
-            total: tablePage.total,
-            showTotal: total => `Total ${total} items`,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            onChange: (page, pageSize) => onPageChange(page, pageSize as number)
-          }}
+          pagination={pagination}
           columns={columns} />
       </>
     )
