@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Table, Button, Space, Divider, Tooltip, Popconfirm } from 'antd'
 import { RouteComponentProps } from 'react-router-dom'
 import { TablePaginationConfig } from 'antd/lib/table'
-import useTableData, { OperationTypeEnum, TDataSource1 } from './reducer'
+import useTableData, { OperationTypeEnum, TDataSource1, ISearchObj } from './reducer'
+import QueryForm from './queryForm'
 
 interface IProps extends RouteComponentProps {}
 
@@ -27,19 +28,21 @@ const HookComponent: React.FC<IProps> = (props) => {
 
     console.count('entry')
     // const [dataSource, setDataSource] = useState<TDataSource1[]>([])
-    const [dataSource, dispatchDataSource] = useTableData([])
+    const [tableData1, dispatchDataSource] = useTableData()
+    const { tableData, searchObj } = tableData1
     const [loading, setLoading] = useState(false)
     const [tablePage, setTablePage] = useState<TPage>({
       current: 1, size: 5, total: 0
     })
 
-    function getList(tPage: TPage) {
+    function getList(tPage: TPage, search: ISearchObj) {
       setLoading(true)
       setTimeout(x => {
         const { current, size } = tPage
-        let data = dataSource1.slice((current - 1) * size, current* size)
-
-        setTablePage({ ...tPage, total: dataSource1.length })
+        const searchAge = search.age ? search.age : 0
+        const dataPool = dataSource1.filter(x => x.age > searchAge)
+        let data = dataPool.slice((current - 1) * size, current* size)
+        setTablePage({ ...tPage, total: dataPool.length })
         setLoading(false)
         dispatchDataSource({type: OperationTypeEnum.REFRESH, payload: data})
       }, 100)
@@ -54,13 +57,18 @@ const HookComponent: React.FC<IProps> = (props) => {
     function onPageChange(page: number, pageSize: number) {
       const tPage = { ...tablePage, current: page, size: pageSize }
       setTablePage(tPage)
-      getList(tPage)
+      getList(tPage, searchObj)
+    }
+
+    function onSearchChange(search: ISearchObj) {
+      dispatchDataSource({type: OperationTypeEnum.SEARCH, payload: search})
+      return getList(tablePage, search)
     }
 
     // 只执行一次
     useEffect(() => {
       console.count('useEffect')
-      getList(tablePage)
+      getList(tablePage, searchObj)
     }, [])
 
     // getList接口尽量纯的参数接收，不从useEffect发起请求
@@ -139,13 +147,12 @@ const HookComponent: React.FC<IProps> = (props) => {
 
     return (
       <>
+      <div>{JSON.stringify(tableData)}</div>
         <Divider></Divider>
-        <Space style={{ marginBottom: 16 }}>
-          <Button onClick={() => getList(tablePage)} loading={loading}>查询</Button>
-        </Space>
+        <QueryForm loading={loading} onSearch={(search) => onSearchChange(search)}></QueryForm>
         <Table
           loading={loading}
-          dataSource={dataSource}
+          dataSource={tableData}
           pagination={pagination}
           columns={columns} />
       </>
