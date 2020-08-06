@@ -4,10 +4,11 @@ import { RouteComponentProps } from 'react-router-dom'
 import { TablePaginationConfig } from 'antd/lib/table'
 import useTableData, { OperationTypeEnum, TDataSource1, ISearchObj } from './reducer'
 import QueryForm from './queryForm'
+import StaticTable from './staticTable'
 
 interface IProps extends RouteComponentProps {}
 
-type TPage = {
+export type TPage = {
   current: number
   size: number
   total: number
@@ -24,13 +25,11 @@ for (let i = 0; i < 40; i++) {
   dataSource1.push(item)
 }
 
-const HookComponent: React.FC<IProps> = (props) => {
+const CustomTable: React.FC<IProps> = (props) => {
 
     console.count('entry')
-    // const [dataSource, setDataSource] = useState<TDataSource1[]>([])
-    const [tableData1, dispatchDataSource] = useTableData()
-    const { tableData, searchObj } = tableData1
     const [loading, setLoading] = useState(false)
+    const [{ tableData, searchObj }, dispatchDataSource] = useTableData()
     const [tablePage, setTablePage] = useState<TPage>({
       current: 1, size: 5, total: 0
     })
@@ -49,9 +48,8 @@ const HookComponent: React.FC<IProps> = (props) => {
     }
 
     function deleteItem (item: TDataSource1) {
-      setLoading(true)
       dispatchDataSource({type: OperationTypeEnum.DELETE, payload: item})
-      setLoading(false)
+      console.count('delete')
     }
 
     function onPageChange(page: number, pageSize: number) {
@@ -76,86 +74,19 @@ const HookComponent: React.FC<IProps> = (props) => {
     //   getList()
     // }, [tablePage.current, tablePage.size])
 
-    const pagination = {
-      defaultCurrent: tablePage.current,
-      defaultPageSize: tablePage.size,
-      total: tablePage.total,
-      showTotal: (total: number) => `Total ${total} items`,
-      showSizeChanger: true,
-      showQuickJumper: true,
-      onChange: (page: number, pageSize: number) => onPageChange(page, pageSize as number)
-    } as TablePaginationConfig
-
-    const columns = [
-      {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
-        width: '100px',
-        render: (name: string) => (
-          <Tooltip title={name}>
-            <div style={{
-              width: '90px',
-              margin: 0,
-              boxSizing: 'border-box',
-              wordBreak: 'keep-all',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}
-            >
-              {name} - tooltip
-            </div>
-          </Tooltip>
-        )
-      },
-      {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
-      },
-      {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
-      },
-      {
-        title: '操作',
-        width: '100px',
-        dataIndex: 'key',
-        render: (key: string, item: TDataSource1) => (
-          <>
-          {/* <Button type="link"
-                  style={{ padding: 0 }}
-                  onClick={() => deleteItem(item)}
-            >
-            删除
-          </Button> */}
-          <Popconfirm title="确认删除?"
-            onConfirm={() => deleteItem(item)}>
-            <a>删除</a>
-          </Popconfirm>
-          <Button type="link"
-                    style={{ padding: 0 }}
-            >
-            查看
-          </Button>
-          </>
-        )
-      },
-    ]
-
     return (
       <>
         <Divider></Divider>
         <QueryForm loading={loading} onSearch={(search) => onSearchChange(search)}></QueryForm>
-        <Table
+        <StaticTable
           loading={loading}
-          dataSource={tableData}
-          pagination={pagination}
-          columns={columns} />
+          tableData={tableData}
+          tablePage={tablePage}
+          onPageChange={onPageChange}
+          deleteItem={deleteItem}
+          />
       </>
     )
   }
 
-  export default HookComponent
+  export default CustomTable

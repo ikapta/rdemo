@@ -8,6 +8,7 @@ import Login from '../login'
 import Todo from './todo/route'
 import Table from './table/route'
 import Table2 from './table2/route'
+import Table3 from './table3/route'
 import ErrorBoundary from '../components/ErrorBoundary/index'
 
 export interface RouteMap extends RouteProps {
@@ -20,7 +21,8 @@ const routers: RouteMap[] = [
   ...NavIndex,
   ...Todo,
   ...Table,
-  ...Table2
+  ...Table2,
+  ...Table3
 ]
 
 const NotFound = () => {
