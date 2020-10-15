@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Modal } from 'antd'
+import { Modal, Spin } from 'antd'
 
 export interface IBaseDialog {
   dialogName: string
@@ -10,12 +10,36 @@ export interface IBaseDialog {
   handleOk: Function
   handleCancel: Function
   render: Function
+  destroy: Function
+  toggleTableLoading: Function
+}
+
+export interface IState {
+  visible: boolean
+  loading: boolean
+  dialogConfig: any
 }
 
 abstract class BaseDialog extends React.Component {
-  public state = { visible: false };
+  public state = {
+    visible: false,
+    loading: false,
+    dialogConfig: {
+      title: '标题',
+      width: '700px',
+      okText: '确认',
+      confirmLoading: false,
+      maskClosable: false,
+    }
+  };
+
+  public toggleTableLoading () {
+    this.setState({ loading: !this.state.loading })
+  }
 
   protected abstract slot(): FunctionComponent | any
+
+  public destroy() {}
 
   public callbackFunction: Function = () => {
     console.log('inner callbackFunction');
@@ -38,24 +62,21 @@ abstract class BaseDialog extends React.Component {
     this.setState({
       visible: false,
     });
+    this.destroy()
   };
 
   render() {
-    const Slot = this.slot
     return (
-      <div className="addDialog">
-        {/* <Button type="primary" onClick={this.showModal}>
-          Open Modal
-        </Button> */}
-        <Modal
-          title="Basic Modal"
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <Slot></Slot>
-        </Modal>
-      </div>
+      <Modal
+        {...this.state.dialogConfig}
+        visible={this.state.visible}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
+      >
+        <Spin spinning={this.state.loading}>
+          {this.slot()}
+        </Spin>
+      </Modal>
     );
   }
 

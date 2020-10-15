@@ -5,13 +5,16 @@ import TodoDialog from './todoDialog'
 import OtherDialog from './otherDialog'
 
 export function openAddDialog (callbackFunction: Function) {
-  const addDialog = <TodoDialog>DialogFactory.getDialog(TodoDialog)
-  addDialog.showModal()
-  addDialog.callbackFunction = callbackFunction
-
-  return function() {
+  const dialogInstance = <TodoDialog>DialogFactory.getDialog(TodoDialog)
+  dialogInstance.showModal()
+  dialogInstance.callbackFunction = callbackFunction
+  dialogInstance.destroy = () => {
     DialogFactory.destroy(TodoDialog.name)
   }
+
+  // return function() {
+  //   DialogFactory.destroy(TodoDialog.name)
+  // }
 }
 
 export function openOtherDialog (callbackFunction: Function) {
